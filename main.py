@@ -1,38 +1,87 @@
-import tkinter as tk
-from tkhtmlview import HTMLLabel
-import requests
+import socket
+import ssl
+import wbetools
 
-# Initialize the main window
-root = tk.Tk()
-root.title("Super Surf Lite")
-root.geometry("800x600")
-
-# Search bar
-search_bar = tk.Entry(root, width=80)
-search_bar.pack(pady=10)
-
-# Browser view area
-browser_frame = tk.Frame(root, bg="white", width=800, height=500)
-browser_frame.pack(fill="both", expand=True, padx=10, pady=10)
-
-# HTML display area
-display_area = HTMLLabel(browser_frame, html="")
-display_area.pack(fill="both", expand=True)
-
-def search():
-    query = search_bar.get()
-    if query:
-        url = f"https://searxng.net/search?q={query.replace(' ', '+')}"
+class URL:
+    def __init__(self, url):
         try:
-            response = requests.get(url)
-            if response.status_code == 200:
-                display_area.set_html(response.text)
-            else:
-                display_area.set_html(f"<h1>Error</h1><p>Failed to retrieve results. Status code: {response.status_code}</p>")
-        except Exception as e:
-            display_area.set_html(f"<h1>Error</h1><p>{str(e)}</p>")
+            self.scheme, url = url.split("://", 1)
+            assert self.scheme in ["http", "https"]
 
-# Bind the Enter key to the search bar to trigger search
-search_bar.bind("<Return>", lambda event: search())
+            if "/" not in url:
+                url = url + "/"
+            self.host, url = url.split("/", 1)
+            self.path = "/" + url
 
-root.mainloop()
+            if self.scheme == "http":
+                self.port = 80
+            elif self.scheme == "https":
+                self.port = 443
+
+            if ":" in self.host:
+                self.host, port = self.host.split(":", 1)
+                self.port = int(port)
+        except:
+            print("Malformed URL found, falling back to the WBE home page.")
+            print("  URL was: " + url)
+            self.__init__("https://browser.engineering")
+
+    def request(self):
+        s = socket.socket(
+            family=socket.AF_INET,
+            type=socket.SOCK_STREAM,
+            proto=socket.IPPROTO_TCP,
+        )
+        s.connect((self.host, self.port))
+    
+        if self.scheme == "https":
+            ctx = ssl.create_default_context()
+            s = ctx.wrap_socket(s, server_hostname=self.host)
+
+        request = "GET {} HTTP/1.0\r\n".format(self.path)
+        request += "Host: {}\r\n".format(self.host)
+        request += "\r\n"
+
+        s.send(request.encode("utf8"))
+        response = s.makefile("r", encoding="utf8", newline="\r\n")
+    
+        statusline = response.readline()
+        version, status, explanation = statusline.split(" ", 2)
+    
+        response_headers = {}
+        while True:
+            line = response.readline()
+            if line == "\r\n": break
+            header, value = line.split(":", 1)
+            response_headers[header.casefold()] = value.strip()
+    
+        assert "transfer-encoding" not in response_headers
+        assert "content-encoding" not in response_headers
+    
+        content = response.read()
+        s.close()
+    
+        return content
+
+    @wbetools.js_hide
+    def __repr__(self):
+        return "URL(scheme={}, host={}, port={}, path={!r})".format(
+            self.scheme, self.host, self.port, self.path)
+
+def show(body):
+    in_tag = False
+    for c in body:
+        if c == "<":
+            in_tag = True
+        elif c == ">":
+            in_tag = False
+        elif not in_tag:
+            print(c, end="")
+
+def load(url):
+    body = url.request()
+    show(body)
+
+if __name__ == "__main__":
+    import sys
+    load(URL(sys.argv[1]))
