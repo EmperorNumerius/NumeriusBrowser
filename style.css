@@ -1,0 +1,164 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+#tabs {
+    display: flex;
+    background-color: #333;
+    padding: 5px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+#tabs button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+#tabs button.active {
+    background-color: #666;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+#searchBar {
+    width: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#searchButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-left: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#navigation {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#navigation button {
+    padding: 10px;
+    margin: 0 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#bookmarks {
+    margin: 20px;
+    font-size: 16px;
+}
+
+#bookmarks ul {
+    list-style: none;
+    padding: 0;
+}
+
+#bookmarks li {
+    cursor: pointer;
+    color: #4CAF50;
+    margin: 5px 0;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+#tabs {
+    display: flex;
+    background-color: #333;
+    padding: 5px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+#tabs button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+#tabs button.active {
+    background-color: #666;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+#searchBar {
+    width: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#searchButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-left: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#navigation {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#navigation button {
+    padding: 10px;
+    margin: 0 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#bookmarks {
+    margin: 20px;
+    font-size: 16px;
+}
+
+#bookmarks ul {
+    list-style: none;
+    padding: 0;
+}
+
+#bookmarks li {
+    cursor: pointer;
+    color: #4CAF50;
+    margin: 5px 0;
+}
